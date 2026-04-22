@@ -1,0 +1,1 @@
+FocusTrace is a focus tracking application that visualizes the gap between what you intend to do and what you actually complete.
