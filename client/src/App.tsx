@@ -1,14 +1,20 @@
 import { useEffect, useState } from "react";
-
-type Task = {
-  id: string;
-  title: string;
-  completed: boolean;
-};
+import type { Task } from "./types/types"
+import { TaskInput } from "./components/TaskInput"
+import { TaskList } from "./components/TaskList"
 
 function App() {
   const [tasks, setTasks] = useState<Task[]>([]);
-  const [title, setTitle] = useState("");
+
+  const handleAdd = async (title: string) => {
+    const res = await fetch("/api/tasks", {
+      method: "POST",
+      headers: { "Content-Type": "application/json"},
+      body: JSON.stringify({title}),
+    });
+    const newTask = await res.json();
+    setTasks([...tasks, newTask])
+  }
 
   const handleDelete = async (id: string) => {
     await fetch(`/api/tasks/${id}`, {
@@ -38,52 +44,9 @@ function App() {
   }, []);
   return (
     <div className="app">
-      <h1>FocusFlow</h1>
-
-      <div className="input-group">
-        <input
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
-          placeholder="New task"
-        />
-
-        <button
-          onClick={async () => {
-            const res = await fetch("/api/tasks", {
-              method: "POST",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({ title }),
-            });
-            const newTask = await res.json();
-            setTasks([...tasks, newTask]);
-            setTitle("");
-          }}
-        >
-          Add
-        </button>
-      </div>
-      <ul>
-        {tasks.map((task) => (
-          <li key={task.id}>
-            <div className="task-left">
-              <input
-                type="checkbox"
-                checked={task.completed}
-                onChange={() => handleToggle(task.id)}
-              />
-              <span className={task.completed ? "completed" : ""}>
-                {task.title}
-              </span>
-            </div>
-            <button
-              className="delete-btn"
-              onClick={() => handleDelete(task.id)}
-            >
-              X
-            </button>
-          </li>
-        ))}
-      </ul>
+      <h1>FocusTrace</h1>
+      <TaskInput onAdd={handleAdd} />
+      <TaskList tasks={tasks} onToggle={handleToggle} onDelete={handleDelete}/>
     </div>
   );
 }
