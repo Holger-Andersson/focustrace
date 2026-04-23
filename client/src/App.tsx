@@ -18,22 +18,13 @@ function App() {
     setTasks((prev) => prev.filter((task) => task.id !== id));
   };
 
-  const handleToggle = async (
-    id: string,
-    currentCompleted: boolean,
-  ): Promise<void> => {
-    const updatedCompleted = !currentCompleted;
-
+  const handleToggle = async (id: string): Promise<void> => {
     await fetch(`/api/tasks/${id}`, {
       method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ completed: updatedCompleted }),
     });
     setTasks((prev) =>
       prev.map((task) =>
-        task.id === id ? { ...task, completed: updatedCompleted } : task,
+        task.id === id ? { ...task, completed: !task.completed} : task,
       ),
     );
   };
@@ -46,39 +37,50 @@ function App() {
     fetchTasks();
   }, []);
   return (
-    <div style={{ padding: 20 }}>
+    <div className="app">
       <h1>FocusFlow</h1>
 
-      <input
-        value={title}
-        onChange={(e) => setTitle(e.target.value)}
-        placeholder="New task"
-      />
+      <div className="input-group">
+        <input
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
+          placeholder="New task"
+        />
 
-      <button
-        onClick={async () => {
-          const res = await fetch("/api/tasks", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ title }),
-          });
-          const newTask = await res.json();
-          setTasks([...tasks, newTask]);
-          setTitle("");
-        }}
-      >
-        Add
-      </button>
+        <button
+          onClick={async () => {
+            const res = await fetch("/api/tasks", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ title }),
+            });
+            const newTask = await res.json();
+            setTasks([...tasks, newTask]);
+            setTitle("");
+          }}
+        >
+          Add
+        </button>
+      </div>
       <ul>
         {tasks.map((task) => (
           <li key={task.id}>
-            <input
-              type="checkbox"
-              checked={task.completed}
-              onChange={() => handleToggle(task.id, task.completed)}
-            />
-            {task.title}
-            <button onClick={() => handleDelete(task.id)}>Delete</button>
+            <div className="task-left">
+              <input
+                type="checkbox"
+                checked={task.completed}
+                onChange={() => handleToggle(task.id)}
+              />
+              <span className={task.completed ? "completed" : ""}>
+                {task.title}
+              </span>
+            </div>
+            <button
+              className="delete-btn"
+              onClick={() => handleDelete(task.id)}
+            >
+              X
+            </button>
           </li>
         ))}
       </ul>
