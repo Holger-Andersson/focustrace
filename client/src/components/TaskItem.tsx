@@ -1,19 +1,41 @@
-import type { Task } from "../types/types"
+import type { Task } from "../types/types";
+import { Timer } from "./Timer";
 
 type Props = {
-    readonly task: Task;
-    readonly onToggle: (id: string) => void;
-    readonly onDelete: (id: string) => void;
+  readonly task: Task;
+  readonly onDelete: (id: string) => void;
+  readonly onUpdateStatus: (id: string, status: Task["status"]) => void;
 };
 
-export function TaskItem({ task, onToggle, onDelete}: Props) {
-    return (
-        <li>
-            <div className="task-left">
-                <input type="checkbox" checked={task.completed} onChange={() => onToggle(task.id)} />
-                    <span className={task.completed ? "completed" : ""}>{task.title}</span>
-                            </div>
-                            <button className="delete-btn" onClick={() => onDelete(task.id)}>X</button>
-        </li>
-    )
+export function TaskItem({ task, onDelete, onUpdateStatus }: Props) {
+  return (
+    <li className={task.status}>
+      <div className="task-left">
+        <span>{task.title}</span>
+        {task.status === "planned" && (
+          <button
+            className="status-btn"
+            onClick={() => onUpdateStatus(task.id, "active")}
+          >
+            Start
+          </button>
+        )}
+        {task.status === "active" && (
+          <>
+            <Timer startedAt={task.startedAt} />
+            <button
+              className="status-btn"
+              onClick={() => onUpdateStatus(task.id, "done")}
+            >
+              Complete
+            </button>
+          </>
+        )}
+        {task.status === "done" && <span>✅</span>}
+      </div>
+      <button className="delete-btn" onClick={() => onDelete(task.id)}>
+        ×
+      </button>
+    </li>
+  );
 }

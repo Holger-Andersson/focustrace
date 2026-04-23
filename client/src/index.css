@@ -34,6 +34,7 @@ h1 {
 input {
   flex: 1;
   padding: 10px;
+  height: 42px;
   border-radius: 6px;
   border: none;
   background: #1e293b;
@@ -42,10 +43,11 @@ input {
 
 button {
   padding: 10px 14px;
-  border: none;
-  border-radius: 6px;
-  background: #38bdf8;
-  color: #0f172a;
+  height: 42px;
+  background: transparent;
+  border: 1px solid #38bdf8;
+  color: #38bdf8;
+  border-radius: 20px;
   cursor: pointer;
 }
 
@@ -55,11 +57,40 @@ button:hover {
 
 .delete-btn {
   background: transparent;
+  border: none;
   color: #94a3b8;
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  border-radius: 50%;
+  font-size: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .delete-btn:hover {
   color: #f87171;
+}
+
+.status-btn {
+  padding: 3px 10px;
+  font-size: 0.75rem;
+  background: transparent;
+  border: 1px solid #38bdf8;
+  color: #38bdf8;
+  height: auto;
+  border-radius: 20px;
+}
+
+.complete-btn {
+  padding: 3px 10px;
+  font-size: 0.75rem;
+  background: transparent;
+  border: 1px solid #22c55e;
+  color: #22c55e;
+  height: auto;
+  border-radius: 20px;
 }
 
 /* task list */
@@ -85,11 +116,41 @@ li {
   gap: 10px;
 }
 
-.completed {
-  text-decoration: line-through;
-  color: #94a3b8;
-}
-
 li:hover {
   background: #273449;
 }
+
+li.done {
+  opacity: 0.4;
+}
+
+.section-title {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: #64748b;
+  margin-bottom: 10px;
+}
+
+/* ActiveTaskCard */
+.active-card {
+  background: #1a2e44;
+  border-left: 3px solid #38bdf8;
+  border-radius: 6px;
+  padding: 16px;
+  margin-bottom: 20px;
+}
+
+.active-card h2 {
+  font-size: 1.2rem;
+  margin-bottom: 8px;
+}
+
+.timer {
+  font-family: monospace;
+  font-size: 1.5rem;
+  color: #38bdf8;
+  display: block;
+  margin-bottom: 12px;
+}
+
